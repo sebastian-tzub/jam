@@ -1,0 +1,17 @@
+POKER PROJECT (Jam)
+
+Goal:
+- Gain experience using Python, NextJS, FastAPI, PostGres, Docker, OLLAMA, LLM, Open Search
+- Gain and apply knowledge of probability & statistics
+- Build large scalable project with many moving parts 
+
+What: 
+- Webstie application
+- Provides poker hand analysis and explanation using LLM 
+- Ability to play custom games with computer 
+- Variance analyzer; see how probable down swings are and to what extent 
+- LLM explanations as to WHY optimial tables are the way they are 
+- Create poker solver engine 
+
+
+* How to apply linear algebra to this as well or OLLAMA? 
