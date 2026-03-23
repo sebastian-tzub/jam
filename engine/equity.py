@@ -55,12 +55,12 @@ def hand_equity_river(hands, board):
 # Dive by wins by total runouts to get equity 
 def hand_equity_turn(hands, board, remaining): 
 
-    river_runouts = combinations(remaining, 1)
+    runouts = combinations(remaining, 1)
     total_equities = np.zeros(len(hands)) # tracks equities for each player across all possible runouts 
     num_runouts = 0
 
     # for each possible run out calculate 
-    for river_card in river_runouts: 
+    for river_card in runouts: 
         complete_board = board + list(river_card)
         curr_equities = hand_equity_river(hand, complete_board)
         total_equities = [i + j for i, j in zip(curr_equities, total_equities)]
@@ -74,8 +74,23 @@ def hand_equity_turn(hands, board, remaining):
     return player_equities 
 
 def hand_equity_flop(hands, board, remaining): 
+    runouts = combinations(remaining, 2)
+    total_equities = np.zeros(len(hands))
+    num_runouts = 0 
 
-    return equities 
+    # for each possible run out calculate
+    for runout_cards in runouts: 
+        complete_board = board + list(runout_cards)
+        curr_equities = hand_equity_river(hand, complete_board)
+        total_equities = [i + j for i, j in zip(curr_equities, total_equities)]
+        num_runouts += 1
+
+    # divide wins for each player by total runouts to get equity 
+    player_equities = [] # ACTUAL equities of each player (total_equities / num of runouts)
+    for i, equity in enumerate(total_equities): 
+        player_equities.append(total_equities[i] / num_runouts)
+
+    return player_equities 
 
 # TOO MANY COMBINATIONS ! 
 def hand_equity_preflop(): 
