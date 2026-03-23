@@ -2,6 +2,7 @@ from hand_evaluator import best_of_seven_cards
 from card import make_deck
 from itertools import combinations
 import numpy as np
+import random 
 
 # ASSUMES EXACT HAND OF PLAYERS IS KNOWN (specific hand not range)
 # Returns list of equities for each player 
@@ -14,14 +15,14 @@ def hand_equity(hands, board):
     #get current street and call corresponding function to evaluate current street 
     length = len(board)
 
-    if length == 3: 
+    if length == 3: # flop 
         return hand_equity_flop(hands, board, remaining)
-    elif length == 4: 
+    elif length == 4: # turn
         return hand_equity_turn(hands, board, remaining)
-    elif length == 5: 
+    elif length == 5: # river
         return hand_equity_river(hands, board)
-    else: 
-        return hand_equity_preflop()
+    else: #preflop
+        return hand_equity_preflop(hands, remaining)
 
 
 def hand_equity_river(hands, board): 
@@ -94,5 +95,20 @@ def hand_equity_flop(hands, board, remaining):
 
     return player_equities 
 
-# TOO MANY COMBINATIONS ! 
-def hand_equity_preflop(): 
+# TOO MANY COMBINATIONS: 
+# Montecarlo simulation on preflop runouts
+def hand_equity_preflop(hands, remaining): 
+    total_equities = np.zeros(len(hands))
+
+    num_runouts = 10000 #TODO let this be variable by user 
+    for _ in range(num_runouts):
+        board = random.sample(remaining, 5)
+        curr_equities = hand_equity_river(hands, board)
+        total_equities = [i + j for i, j in zip(curr_equities, total_equities)]
+
+    # divide wins for each player by total runouts to get equity 
+    player_equities = [] # ACTUAL equities of each player (total_equities / num of runouts)
+    for i, equity in enumerate(total_equities): 
+        player_equities.append(total_equities[i] / num_runouts)
+    
+    return player_equities
