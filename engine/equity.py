@@ -1,4 +1,6 @@
 from hand_evaluator import best_of_seven_cards
+from card import make_deck
+from itertools import combinations
 import numpy as np
 
 # ASSUMES EXACT HAND OF PLAYERS IS KNOWN (specific hand not range)
@@ -13,11 +15,11 @@ def hand_equity(hands, board):
     length = len(board)
 
     if length == 3: 
-        return hand_equity_flop(hands, board)
+        return hand_equity_flop(hands, board, remaining)
     elif length == 4: 
         return hand_equity_turn(hands, board, remaining)
     elif length == 5: 
-        return hand_equity_river(hands, board, remaining)
+        return hand_equity_river(hands, board)
     else: 
         return hand_equity_preflop()
 
@@ -62,7 +64,7 @@ def hand_equity_turn(hands, board, remaining):
     # for each possible run out calculate 
     for river_card in runouts: 
         complete_board = board + list(river_card)
-        curr_equities = hand_equity_river(hand, complete_board)
+        curr_equities = hand_equity_river(hands, complete_board)
         total_equities = [i + j for i, j in zip(curr_equities, total_equities)]
         num_runouts += 1
 
@@ -81,7 +83,7 @@ def hand_equity_flop(hands, board, remaining):
     # for each possible run out calculate
     for runout_cards in runouts: 
         complete_board = board + list(runout_cards)
-        curr_equities = hand_equity_river(hand, complete_board)
+        curr_equities = hand_equity_river(hands, complete_board)
         total_equities = [i + j for i, j in zip(curr_equities, total_equities)]
         num_runouts += 1
 
