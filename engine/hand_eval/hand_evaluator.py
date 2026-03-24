@@ -33,6 +33,7 @@ def evaluate(cards):
     is_two_pairs = max(rank_counts.values()) == 2 and len(rank_counts) == 3
     if_full_house = max(rank_counts.values()) == 3 and min(rank_counts.values()) == 2
    
+   #TODO: Make this more clean 
     if is_straight_flush:
         return (8, max(ranks))
     elif is_four_pair:
@@ -57,9 +58,3 @@ def evaluate(cards):
         return (1, max([rank for rank, count in rank_counts.items() if count == 2]), *kickers)
     else:
         return(0, *sorted(ranks, reverse=True))
-
-
-if __name__ == "__main__":
-    # Test a flush: 5 hearts (cards 2, 6, 10, 14, 18)
-    hand = [2, 6, 10, 14, 22]
-    print(evaluate(hand))
