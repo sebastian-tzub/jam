@@ -1,4 +1,3 @@
-
 nodes = dict()
 
 # Generic node class; 
@@ -100,3 +99,13 @@ def cfr(cards, history, reach_probs,
         node.regret_sum[i] += regret * reach_probs[opponent] #weigh regret by chance of opponents actions leading to this node 
 
     return ev
+
+
+def kuhn_solver(): 
+    possible_situations = []
+    for situation in possible_situations: 
+        for i in range(100): 
+            train(situation)
+
+def train(situation): #TODO create situation class 
+    cfr(situation)
