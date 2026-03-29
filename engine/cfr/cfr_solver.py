@@ -101,8 +101,8 @@ def cfr(cards, history, reach_probs,
     return ev
 
 
-def kuhn_solver(): 
-    possible_situations = []
+def kuhn_solver(cards): 
+    possible_situations = list(combinations(cards,2))
     for situation in possible_situations: 
         for i in range(100): 
             train(situation)
