@@ -19,6 +19,8 @@ def get_valid_actions(history):
         return [actions[0], actions [3]]
     elif (history == ["ch"]):
         return [actions[1], actions[2]]
+    elif (history == ["ch", "b"]):
+        return [actions[0], actions[3]]
 
 # Checks if current round over given round history 
 # Returns true if so 
@@ -43,7 +45,7 @@ def is_terminal(history):
 def determine_payout(history, cards):
      
     #determine pot size from bets from history 
-    pot_size = history.count("b") + 2 # each player antes a chip at the start of a round 
+    pot_size = history.count("c") + 1 # each player antes a chip at the start of a round 
 
     #determine winner from history and cards 
     if(history.count("f") == 0): #no folds, showdown, determine winner by highest card
