@@ -1,4 +1,5 @@
-from kuhn_poker import is_terminal, determine_payout, get_valid_actions
+from kuhn_poker import cards, is_terminal, determine_payout, get_valid_actions
+from itertools import combinations
 
 nodes = dict()
 
@@ -54,14 +55,16 @@ class Node:
 def cfr(cards, history, reach_probs,
         is_terminal, get_payoff, get_valid_actions, num_players):
 
-    #base case 
-    if(is_terminal(history)): # if game over return payout 
-        return get_payoff(history, cards)
-
     # get current player 
     # get remainder of action history div number of players to get curr player 
     current_player = len(history) % num_players #TODO UPDATE THIS LOGIC 
+
+    #base case 
+    if(is_terminal(history)): # if game over return payout  
+        return get_payoff(history, cards)
+
     # get valid actions availible at this node! 
+    print("history:", history)
     valid_actions = get_valid_actions(history)
 
     # Generate key based on current situation to get node from node dictionary
@@ -106,7 +109,7 @@ def cfr(cards, history, reach_probs,
 def kuhn_solver(cards): 
     possible_situations = list(combinations(cards,2))
     for situation in possible_situations: 
-        for i in range(100): 
+        for i in range(10000): 
             train(situation)
 
 def train(situation): #TODO create situation class 
@@ -119,3 +122,25 @@ def train(situation): #TODO create situation class
         get_valid_actions = get_valid_actions, 
         num_players=2
         )
+
+# Remeber that key is cards of current player and round history 
+def print_strategy(nodes):
+    card_names = {0: "Jack", 1: "Queen", 2: "King"}
+    sorted_nodes = sorted(nodes.items(), key=lambda x: (x[0][0], len(x[0][1])))
+    
+    for key, node in sorted_nodes:
+        card, history = key
+        valid_actions = get_valid_actions(list(history))
+        action_freq = node.get_average_strategy()
+        print(
+            f"Card: {card_names[card]:<6} | History: {str(history):<20} | "
+            f"{valid_actions[0]}: {action_freq[0]:.1%} | "
+            f"{valid_actions[1]}: {action_freq[1]:.1%}"
+        )
+  
+
+def main():
+    kuhn_solver(cards)
+    print_strategy(nodes)
+
+main()
