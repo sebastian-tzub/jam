@@ -1,3 +1,5 @@
+from kuhn_poker import is_terminal, determine_payout, get_valid_actions
+
 nodes = dict()
 
 # Generic node class; 
@@ -108,4 +110,12 @@ def kuhn_solver(cards):
             train(situation)
 
 def train(situation): #TODO create situation class 
-    cfr(situation)
+    cfr(
+        cards = list(situation), 
+        history = [], 
+        reach_probs = [1.0, 1.0], 
+        is_terminal = is_terminal,
+        get_payoff = determine_payout, 
+        get_valid_actions = get_valid_actions, 
+        num_players=2
+        )
