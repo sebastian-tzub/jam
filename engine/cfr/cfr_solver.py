@@ -1,5 +1,6 @@
 from kuhn_poker import cards, is_terminal, determine_payout, get_valid_actions
 from itertools import combinations
+from itertools import permutations
 
 nodes = dict()
 
@@ -64,7 +65,6 @@ def cfr(cards, history, reach_probs,
         return get_payoff(history, cards)
 
     # get valid actions availible at this node! 
-    print("history:", history)
     valid_actions = get_valid_actions(history)
 
     # Generate key based on current situation to get node from node dictionary
@@ -100,16 +100,19 @@ def cfr(cards, history, reach_probs,
     #Compute and update regret 
     opponent = 1 - current_player # works only for kuhn poker 
     for i, action in enumerate(valid_actions): 
-        regret = action_payoffs[i] - ev
+        if (current_player == 0):
+            regret = action_payoffs[i] - ev
+        else: 
+            regret = ev - action_payoffs[i] #TODO EXPLAIN WHY 
         node.regret_sum[i] += regret * reach_probs[opponent] #weigh regret by chance of opponents actions leading to this node 
 
     return ev
 
 
 def kuhn_solver(cards): 
-    possible_situations = list(combinations(cards,2))
-    for situation in possible_situations: 
-        for i in range(10000): 
+    possible_situations = list(permutations (cards,2))
+    for i in range(1000000):
+        for situation in possible_situations:
             train(situation)
 
 def train(situation): #TODO create situation class 
